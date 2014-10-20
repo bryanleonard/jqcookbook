@@ -32,9 +32,14 @@
 	
 var people = [
 	{
-		title: "Mr",
+		title: "A",
 		firstname: "John",
 		lastname: "Doe"
+	},
+	{
+		title: "Mrs",
+		firstname: "Stephaniel",
+		lastname: "Coldbrain"
 	},
 	{
 		title: "Mrs",
@@ -55,24 +60,32 @@ var people = [
 		title: "Miss",
 		firstname: "Laura",
 		lastname: "Doe"
+	},
+	{
+		title: "Mr",
+		firstname: "Dexter",
+		lastname: "Alabaster"
+	},
+	{
+		title: "Sir",
+		firstname: "Cubic",
+		lastname: "Zirconium"
 	}
 ];
 
-function findObjs(param, val, obj){
-	var matches = [];
-
-	for (var i in obj) {
-	    if (typeof obj[i] === 'object') {
-	    	matches = matches.concat( findObjs(param, val, obj[i]) );
-	    } else if (i === param && obj[param] === val) {
-	    	matches.push(obj);
-	    }
+function sortObjByParam(param) {
+	return function(a,b) {
+		if (a[param] == b[param]) { return 0; };
+		if (a[param] > b[param] ) { return 1; }
+		else { return -1 };
 	};
-	return matches;
 };
 
-console.log( 'peoples: ', findObjs('lastname', 'Doe', people) );
-console.log( 'peoples: ', findObjs('title', 'Sir', people) );
+var byTitle = people.sort(sortObjByParam("title"));
+console.log( 'Title: ', byTitle[0]["title"], byTitle[0]["lastname"] );
+
+var byLName = people.sort(sortObjByParam("lastname"));
+console.log( 'LName: ', byLName[0]["title"], byLName[0]["lastname"] );
 
 </script>
 
