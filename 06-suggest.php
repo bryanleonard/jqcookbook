@@ -92,11 +92,12 @@ var makeSuggestion = function() {
 			'text': searchText
 		}
 		,beforeSend: function() {
+			$list.empty();
 			$list.append("<li class='loading'>Loading...</li>");
 		}
 	})
 	.done(function(data) {
-		console.log(data);
+		console.log(data.results);
 		// $text.empty();
 	})
 	.fail(function() {
