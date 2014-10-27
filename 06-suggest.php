@@ -21,7 +21,7 @@
 			left: 25px;
 			top: 51px;
 			z-index: 100;
-			/*display: none;*/
+			display: none;
 			list-style: none;
 			padding: 10px;
 		}
@@ -42,7 +42,7 @@
 				
 	<div class="suggest-input">
 		<input type='text' id='text'>
-		<ul class="suggest-list"><li><a href="#" class="suggestion">thing</a></li></ul>
+		<ul class="suggest-list"></li></ul>
 	</div>
 </div>
 
@@ -92,17 +92,21 @@ var makeSuggestion = function() {
 			'text': searchText
 		}
 		,beforeSend: function() {
-			$list.empty();
-			$list.append("<li class='loading'>Loading...</li>");
+			$list.empty().append("<li class='loading'>Loading...</li>");
 		}
 	})
 	.done(function(data) {
-		console.log(data.results);
-		// $text.empty();
+		$list.empty();
+		if (data.success && data.results.length > 0) {
+			for (var key in data.results) {
+				$list.append( '<li>' + data.results[key]['title'] + "</li>");
+			}
+		} else {
+			$list.append("<li class='loading'>No results found.</li>");
+		};
 	})
 	.fail(function() {
-		console.log('bomb');
-		// $text.empty();
+		$list.empty().append("<li class='loading'>Whoopsie, something gone done busted.</li>");
 	})
 };
 
