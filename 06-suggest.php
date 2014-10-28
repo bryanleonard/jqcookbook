@@ -92,16 +92,35 @@ var makeSuggestion = function() {
 			'text': searchText
 		}
 		,beforeSend: function() {
+			$list.empty();
 			$list.append("<li class='loading'>Loading...</li>");
 		}
 	})
 	.done(function(data) {
-		console.log(data);
-		// $text.empty();
+
+		setTimeout(function () {
+
+			$list.empty();
+
+			if (data.results.length > 0) {
+
+				for (var key in data.results) {
+					$list.append("<li><a href='#' class='suggestion'>" + data.results[key]['title'] +"</a></li>")
+				}
+
+				// Start next file (07) from page 114 of PDF. (Waiting for an AJAX response)
+
+			
+			} else {
+				
+				$list.append("<li>No results found.</li>")
+			}
+
+		}, 500);
+  		
 	})
 	.fail(function() {
-		console.log('bomb');
-		// $text.empty();
+		$list.empty().append("<li>Sorry, something went and broke.</li>")
 	})
 };
 
