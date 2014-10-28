@@ -21,7 +21,7 @@
 			left: 25px;
 			top: 51px;
 			z-index: 100;
-			/*display: none;*/
+			display: none;
 			list-style: none;
 			padding: 10px;
 		}
