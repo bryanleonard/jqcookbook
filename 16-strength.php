@@ -278,7 +278,7 @@ var doValidation = function(input)  {
 
 		console.log('result', result, !result);
 
-		if (result == false) {
+		if (result != true) {
 			console.log('are we here?');
 			addErrorData($input, result);
 		};
@@ -353,10 +353,11 @@ var validatePasswords = function(value) {
 	return true;
 }
 
+//pg 180
 
 
 var addErrorData = function(el, err) {
-	console.log(el, error);
+	console.log('helllloooo ', el, error);
 	el.parent().addClass('error');
 	el.after('<div class="error-data">' + err + "</div");
 };
