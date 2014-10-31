@@ -1,7 +1,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>Basic validation</title>
+	<title>More basic validation</title>
 
 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.css">
 	<!-- <link rel="stylesheet" href="styles.css" type="text/css"> -->
@@ -47,7 +47,7 @@
 			<div class="col-xs-8 col-xs-push-2">
 	
 	<hgroup>
-		<h1 class="page-header">Basic validation</h1>
+		<h1 class="page-header">More basic validation</h1>
 	</hgroup>
 
 
@@ -56,7 +56,7 @@
 		<h3>Register</h3>
 	</div>
 
-	<div class="alert alert-danger hiddenz" role="alert">
+	<div class="alert alert-danger hidden" role="alert">
 		<p><b>The following errors occurred.</b></p>
 		<ul><li>hi</li></ul>
 	</div>
@@ -97,8 +97,7 @@
 	</div>
 
 	<div class="input-frame form-group">
-		<label for="confirmPassword">Confirm
-		Password:</label>
+		<label for="confirmPassword">Confirm Password:</label>
 		<input name="confirmPassword" id="confirmPassword" type="password" class="required" />
 	</div>
 
@@ -128,35 +127,112 @@ $('.submit-btn').on('click', function(e) {
 	e.preventDefault();
 
 	var inputs = $('input')
-		,isError = false
+		// ,isError = false
 	;
 
-	// Remove old errors
-	$('.input-frame').removeClass('error');
-	$('.error-data').remove();
-
 	for (var i=0; i < inputs.length; i++) {
-	    var input = inputs[i];
-
-	    console.log($(input));
-
-	    if ( $(input).hasClass('required') && !validationRequired( $(input).val() ) ) {
-	    	addErrorData( $(input), "This is required and stuff. Fill it in." );
-	    	isError = true;
-	    }
+	    doValidation(inputs[i]);
 	};
 
-
-	if (isError === false) {
+	// if (isError === false) {
+	// 	alert("Form submitted");
+	// };
+	if ($('.error-data').length == 0) {
+		//No errors, submit the form
 		alert("Form submitted");
-	}
-
-
+	};
 });
+
+$('input').on("keyup", function(){
+	doValidation($(this));
+});
+
+var doValidation = function(input)  {
+	var $input = $(input);
+
+	$input.parent().removeClass('error');
+	$input.next('.error-data').remove();
+
+	 if ($input.hasClass('required') && !validationRequired( $input.val() )) {
+	    	addErrorData( $(input), "This is required and stuff. Fill it in." );
+	    	// isError = true;
+	    };
+
+    if ($input.hasClass('number') && !validationNumber( $input.val() )) {
+    	addErrorData( $(input), "This one needs only numbers." );
+    	// isError = true;
+    };
+
+    if ($input.hasClass('credit-card') && !validationCreditCard( $input.val() )) {
+		addErrorData($(input), "Invalid credit card number");
+		// isError = true;
+	};
+
+	if ($input.hasClass('date') &&
+		!validateDate($(input).val())) { addErrorData($(input), "Invalid date provided");
+		// isError = true;
+	};
+
+	if ($(input).hasClass('email') && !validateEmail($($(input)).val())) {
+		addErrorData($(input), "Invalid email address provided.");
+		// isError = true;
+	};
+
+}
+
+
 
 var validationRequired = function(value) {
 	if (value == "") return false;
 	return true
+};
+
+var validationNumber = function(value) {
+	if (value != "") {
+		return !isNaN(parseInt(value, 10)) && isFinite(value);
+		//isFinite, in case letter is on the end
+	}
+	return true;
+}
+
+var validationCreditCard = function(value) {
+	if (value != "") {
+		return /^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$/.test(value);
+	}
+	return true;
+};
+
+var validateDate = function(value) {
+if (value != "") {
+	if (/^\d{2}([.\/-])\d{2}\1\d{4}$/.test(value)) {
+		// Remove leading zeros
+		value = value.replace(/0*(\d*)/gi,"$1");
+		
+		var dateValues = value.split(/[\.|\/|-]/);
+		// Correct the month value as month index starts at 0 now 1 (e.g. 0 = Jan, 1 = Feb)
+		dateValues[1]--;
+		var date = new Date(dateValues[2], dateValues[1],
+		dateValues[0]);
+		if (
+			date.getDate() == dateValues[0] &&
+			date.getMonth() == dateValues[1] &&
+			date.getFullYear() == dateValues[2]
+			) {
+			return true;
+		}
+	}
+		return false;
+	} else {
+		return true;
+	}
+};
+
+function validateEmail(value) {
+	if (value != "") {
+		// return /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/i.test(value);
+		return /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/i.test(value);
+	}
+	return true;
 };
 
 var addErrorData = function(el, err) {
