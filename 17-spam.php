@@ -1,7 +1,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>More basic validation</title>
+	<title>Anti-spam validation</title>
 
 	<!-- <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.css"> -->
 	<link rel="stylesheet" href="/assets/lib/bootstrap-3.1.1/css/bootstrap.css">
@@ -74,7 +74,7 @@
 			<div class="col-xs-8 col-xs-push-2">
 	
 	<hgroup>
-		<h1 class="page-header">More basic validation</h1>
+		<h1 class="page-header">Anti-spam validation</h1>
 	</hgroup>
 
 
@@ -132,6 +132,11 @@
 		<input name="confirmPassword" id="confirmPassword" type="password" class="required confirm-password" />
 	</div>
 
+	<div class="input-frame form-group">
+		<label for="">Enter the number <span class="anti-spam-number"></span>:</label>
+		<input type="text" class="required anti-spam-input">
+	</div>
+
 	<div class="actions">
 		<label></label>
 		<button  class="submit-btn btn btn-primary">Submit</button>
@@ -154,6 +159,8 @@
 
 <script>
 
+var spamNumber = Math.floor(Math.random() * (100-1+1)) + 1;
+$('.anti-spam-number').html(spamNumber);
 
 $('.submit-btn').on('click', function(e) {
 	e.preventDefault();
@@ -273,22 +280,18 @@ var doValidation = function(input)  {
 
 	if ($input.hasClass("confirm-password")) {
 
-		console.log('we is here');
-
 		var result = validatePasswords( $input.val() );
 
-
-		console.log('result', result, !result);
-
 		if (result != true) {
-			console.log('are we here?');
 			addErrorData($input, result);
 		};
 	};
 
-}
+	if ($input.hasClass('anti-spam-input') && !validateAntiSpam( $input.val() ) ) {
+		addErrorData($input, "Incorrect answer.");
+	};
 
-
+};
 
 var validationRequired = function(value) {
 	if (value == "") return false;
@@ -355,11 +358,15 @@ var validatePasswords = function(value) {
 	return true;
 }
 
-//pg 180
+var validateAntiSpam = function(value) {
+	if (value !== "") {
+		if (parseInt(value, 10) !== spamNumber ) return false;
+	}
+	return true;
+} // see also http://www.google.com/recaptcha for better anti-spam shenanigans.
 
 
 var addErrorData = function(el, err) {
-	console.log('helllloooo ', el, err);
 	el.parent().addClass('error');
 	el.after('<div class="error-data">' + err + "</div");
 };
