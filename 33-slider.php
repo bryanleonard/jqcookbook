@@ -1,7 +1,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title></title>
+	<title>Slider plugin</title>
 
 	<!-- <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.css"> -->
 	<link rel="stylesheet" href="/assets/lib/bootstrap-3.1.1/css/bootstrap.css">
@@ -23,10 +23,15 @@
 			<div class="col-xs-12">
 	
 	<hgroup>
-		<h1 class="page-header"></h1>
+		<h1 class="page-header">Slider plugin</h1>
 	</hgroup>
 
-
+<div class="mySlider">
+<div>Slider Content 1</div>
+<img src="http://placehold.it/400x300" />
+<div>Slider Content 3</div>
+<div>Slider Content 4</div>
+</div>
 
 			</div>
 		</div>
